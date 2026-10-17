@@ -1,0 +1,300 @@
+﻿{
+  "pci": {
+    "8086": {
+      "name": "Intel Corporation",
+      "supportUrl": "https://www.intel.com/content/www/us/en/download-center/home.html",
+      "searchPatterns": ["Intel Driver & Support Assistant", "chipset", "wireless", "ethernet", "graphics"],
+      "downloadHints": [
+        "https://www.intel.com/content/www/us/en/download-center/home.html",
+        "https://www.intel.com/content/www/us/en/support/detect.html"
+      ]
+    },
+    "10DE": {
+      "name": "NVIDIA Corporation",
+      "supportUrl": "https://www.nvidia.com/Download/index.aspx",
+      "searchPatterns": ["GeForce", "Quadro", "RTX", "GTX"],
+      "downloadHints": [
+        "https://www.nvidia.com/Download/index.aspx",
+        "https://www.nvidia.com/Download/Find.aspx"
+      ]
+    },
+    "1002": {
+      "name": "Advanced Micro Devices, Inc. [AMD/ATI]",
+      "supportUrl": "https://www.amd.com/en/support",
+      "searchPatterns": ["Radeon", "Ryzen", "chipset"],
+      "downloadHints": [
+        "https://www.amd.com/en/support/download/drivers.html",
+        "https://www.amd.com/en/support"
+      ]
+    },
+    "1022": {
+      "name": "Advanced Micro Devices, Inc. [AMD]",
+      "supportUrl": "https://www.amd.com/en/support",
+      "searchPatterns": ["chipset", "Ryzen", "USB"],
+      "downloadHints": [
+        "https://www.amd.com/en/support/download/drivers.html"
+      ]
+    },
+    "10EC": {
+      "name": "Realtek Semiconductor Co., Ltd.",
+      "supportUrl": "https://www.realtek.com/Download/Index?lang=en",
+      "searchPatterns": ["Realtek Audio", "Ethernet", "WLAN", "Card Reader"],
+      "downloadHints": [
+        "https://www.realtek.com/Download/Index?lang=en",
+        "https://www.realtek.com/Download/List?cate_id=584"
+      ]
+    },
+    "14E4": {
+      "name": "Broadcom Inc.",
+      "supportUrl": "https://www.broadcom.com/support/download-search",
+      "searchPatterns": ["WLAN", "NetXtreme", "Bluetooth"],
+      "downloadHints": [
+        "https://www.broadcom.com/support/download-search"
+      ]
+    },
+    "168C": {
+      "name": "Qualcomm Atheros",
+      "supportUrl": "https://www.qualcomm.com/support",
+      "searchPatterns": ["Atheros", "WLAN", "Bluetooth"],
+      "downloadHints": [
+        "https://www.qualcomm.com/support",
+        "https://www.atheros.com/"
+      ]
+    },
+    "17CB": {
+      "name": "Qualcomm",
+      "supportUrl": "https://www.qualcomm.com/support",
+      "searchPatterns": ["Snapdragon", "WLAN", "Bluetooth"],
+      "downloadHints": [
+        "https://www.qualcomm.com/support"
+      ]
+    },
+    "1969": {
+      "name": "Qualcomm Atheros (Attansic)",
+      "supportUrl": "https://www.qualcomm.com/support",
+      "searchPatterns": ["Ethernet", "Killer"],
+      "downloadHints": [
+        "https://www.qualcomm.com/support"
+      ]
+    },
+    "14C3": {
+      "name": "MediaTek Inc.",
+      "supportUrl": "https://www.mediatek.com/products",
+      "searchPatterns": ["WLAN", "Bluetooth", "Wi-Fi"],
+      "downloadHints": [
+        "https://www.mediatek.com/products"
+      ]
+    },
+    "0BDA": {
+      "name": "Realtek Semiconductor (USB/WLAN alias)",
+      "supportUrl": "https://www.realtek.com/Download/Index?lang=en",
+      "searchPatterns": ["Realtek", "WLAN", "USB"],
+      "downloadHints": [
+        "https://www.realtek.com/Download/Index?lang=en"
+      ]
+    },
+    "1A86": {
+      "name": "QinHeng Electronics (CH34x)",
+      "supportUrl": "http://www.wch-ic.com/downloads/category/62.html",
+      "searchPatterns": ["CH340", "USB Serial"],
+      "downloadHints": [
+        "http://www.wch-ic.com/downloads/category/62.html"
+      ]
+    },
+    "1106": {
+      "name": "VIA Technologies, Inc.",
+      "supportUrl": "https://www.via.com.tw/en/support/download/",
+      "searchPatterns": ["VIA", "USB", "Audio"],
+      "downloadHints": [
+        "https://www.via.com.tw/en/support/download/"
+      ]
+    },
+    "104C": {
+      "name": "Texas Instruments",
+      "supportUrl": "https://www.ti.com/support-quality/support.html",
+      "searchPatterns": ["TI", "USB"],
+      "downloadHints": [
+        "https://www.ti.com/support-quality/support.html"
+      ]
+    },
+    "15B7": {
+      "name": "Sandisk Corp",
+      "supportUrl": "https://support-en.sandisk.com/app/answers/landing",
+      "searchPatterns": ["SSD", "NVMe"],
+      "downloadHints": [
+        "https://support-en.sandisk.com/app/answers/landing"
+      ]
+    },
+    "144D": {
+      "name": "Samsung Electronics Co Ltd",
+      "supportUrl": "https://semiconductor.samsung.com/consumer-storage/support/",
+      "searchPatterns": ["NVMe", "SSD"],
+      "downloadHints": [
+        "https://semiconductor.samsung.com/consumer-storage/support/"
+      ]
+    },
+    "1B21": {
+      "name": "ASMedia Technology Inc.",
+      "supportUrl": "https://www.asmedia.com.tw/product/",
+      "searchPatterns": ["USB", "SATA", "ASM"],
+      "downloadHints": [
+        "https://www.asmedia.com.tw/product/"
+      ]
+    },
+    "197B": {
+      "name": "JMicron Technology Corp.",
+      "supportUrl": "https://www.jmicron.com/support/",
+      "searchPatterns": ["USB", "SATA"],
+      "downloadHints": [
+        "https://www.jmicron.com/support/"
+      ]
+    },
+    "12D1": {
+      "name": "Huawei Technologies Co., Ltd.",
+      "supportUrl": "https://consumer.huawei.com/en/support/",
+      "searchPatterns": ["Modem", "USB"],
+      "downloadHints": [
+        "https://consumer.huawei.com/en/support/"
+      ]
+    },
+    "1AE0": {
+      "name": "Google, Inc.",
+      "supportUrl": "https://support.google.com/",
+      "searchPatterns": ["Google"],
+      "downloadHints": [
+        "https://support.google.com/"
+      ]
+    },
+    "1912": {
+      "name": "Renesas Electronics Corp.",
+      "supportUrl": "https://www.renesas.com/us/en/support",
+      "searchPatterns": ["USB", "uPD"],
+      "downloadHints": [
+        "https://www.renesas.com/us/en/support"
+      ]
+    },
+    "10B5": {
+      "name": "PLX Technology, Inc.",
+      "supportUrl": "https://www.broadcom.com/support/download-search",
+      "searchPatterns": ["PCIe bridge"],
+      "downloadHints": [
+        "https://www.broadcom.com/support/download-search"
+      ]
+    },
+    "1D6A": {
+      "name": "Aquantia Corp. (Marvell)",
+      "supportUrl": "https://www.marvell.com/support.html",
+      "searchPatterns": ["AQC", "2.5G", "5G", "10G"],
+      "downloadHints": [
+        "https://www.marvell.com/support.html"
+      ]
+    },
+    "8087": {
+      "name": "Intel Corporation (USB)",
+      "supportUrl": "https://www.intel.com/content/www/us/en/download-center/home.html",
+      "searchPatterns": ["Bluetooth", "Wireless"],
+      "downloadHints": [
+        "https://www.intel.com/content/www/us/en/download-center/home.html"
+      ]
+    }
+  },
+  "usb": {
+    "8087": {
+      "name": "Intel Corp.",
+      "supportUrl": "https://www.intel.com/content/www/us/en/download-center/home.html",
+      "searchPatterns": ["Bluetooth", "Wireless"],
+      "downloadHints": [
+        "https://www.intel.com/content/www/us/en/download-center/home.html"
+      ]
+    },
+    "0BDA": {
+      "name": "Realtek Semiconductor Corp.",
+      "supportUrl": "https://www.realtek.com/Download/Index?lang=en",
+      "searchPatterns": ["WLAN", "Bluetooth", "Card Reader", "Audio"],
+      "downloadHints": [
+        "https://www.realtek.com/Download/Index?lang=en"
+      ]
+    },
+    "0CF3": {
+      "name": "Qualcomm Atheros Communications",
+      "supportUrl": "https://www.qualcomm.com/support",
+      "searchPatterns": ["Bluetooth", "WLAN"],
+      "downloadHints": [
+        "https://www.qualcomm.com/support"
+      ]
+    },
+    "0489": {
+      "name": "Foxconn / Hon Hai",
+      "supportUrl": "https://www.foxconn.com/",
+      "searchPatterns": ["Bluetooth"],
+      "downloadHints": [
+        "https://www.foxconn.com/"
+      ]
+    },
+    "04CA": {
+      "name": "Lite-On Technology Corp.",
+      "supportUrl": "https://www.liteon.com/en-us/global/support",
+      "searchPatterns": ["Bluetooth", "WLAN"],
+      "downloadHints": [
+        "https://www.liteon.com/en-us/global/support"
+      ]
+    },
+    "13D3": {
+      "name": "IMC Networks",
+      "supportUrl": "https://www.imcnet.com.tw/",
+      "searchPatterns": ["WLAN", "Bluetooth", "Camera"],
+      "downloadHints": [
+        "https://www.imcnet.com.tw/"
+      ]
+    },
+    "0A5C": {
+      "name": "Broadcom Corp.",
+      "supportUrl": "https://www.broadcom.com/support/download-search",
+      "searchPatterns": ["Bluetooth", "WLAN"],
+      "downloadHints": [
+        "https://www.broadcom.com/support/download-search"
+      ]
+    },
+    "2109": {
+      "name": "VIA Labs, Inc.",
+      "supportUrl": "https://www.via.com.tw/en/support/download/",
+      "searchPatterns": ["USB Hub", "USB3"],
+      "downloadHints": [
+        "https://www.via.com.tw/en/support/download/"
+      ]
+    },
+    "1A86": {
+      "name": "QinHeng Electronics",
+      "supportUrl": "http://www.wch-ic.com/downloads/category/62.html",
+      "searchPatterns": ["CH340", "USB-SERIAL"],
+      "downloadHints": [
+        "http://www.wch-ic.com/downloads/category/62.html"
+      ]
+    },
+    "046D": {
+      "name": "Logitech, Inc.",
+      "supportUrl": "https://support.logi.com/",
+      "searchPatterns": ["Logitech"],
+      "downloadHints": [
+        "https://support.logi.com/"
+      ]
+    },
+    "045E": {
+      "name": "Microsoft Corp.",
+      "supportUrl": "https://www.microsoft.com/hardware",
+      "searchPatterns": ["Xbox", "Surface"],
+      "downloadHints": [
+        "https://support.microsoft.com/"
+      ]
+    }
+  },
+  "genericMicrosoftProviders": [
+    "Microsoft",
+    "Microsoft Corporation",
+    "Microsoft Windows",
+    "(Standard system devices)",
+    "(Standard display types)",
+    "(Standard USB Host Controller)",
+    "Generic"
+  ]
+}
