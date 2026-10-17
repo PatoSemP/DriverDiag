@@ -426,8 +426,6 @@ function Start-DriverDiagGui {
     $toolbar.Dock = 'Top'
     $toolbar.Height = 48
     $toolbar.BackColor = $script:GuiTheme.Bg
-    $toolbar.Visible = $false
-    $form.Controls.Add($toolbar)
 
     $btnCorrigirTodos = New-DriverDiagButton -Text 'Corrigir todos' -Back $script:GuiTheme.AccentHot -Width 120
     $btnCorrigir = New-DriverDiagButton -Text 'Corrigir' -Back $script:GuiTheme.Accent -Width 90
@@ -531,6 +529,9 @@ function Start-DriverDiagGui {
     $split.Orientation = 'Vertical'
     $mainPanel.Controls.Add($split)
 
+    # Toolbar inside mainPanel (Dock Top); add after split so Top docks before Fill and the list stays below the buttons.
+    $mainPanel.Controls.Add($toolbar)
+
     $listView = New-Object System.Windows.Forms.ListView
     $listView.Dock = 'Fill'
     $listView.View = 'Details'
@@ -626,10 +627,9 @@ function Start-DriverDiagGui {
 
     $showResults = {
         $catPanel.Visible = $false
-        $toolbar.Visible = $true
         $mainPanel.Visible = $true
         $mainPanel.BringToFront()
-        $toolbar.BringToFront()
+        $mainPanel.PerformLayout()
         if ($split.Width -gt 100) {
             $split.SplitterDistance = [Math]::Max(380, [int]($form.ClientSize.Width * 0.48))
         }
@@ -638,7 +638,6 @@ function Start-DriverDiagGui {
     $showScope = {
         if ($script:ScanBusy) { return }
         $mainPanel.Visible = $false
-        $toolbar.Visible = $false
         $catPanel.Visible = $true
         $catPanel.BringToFront()
         $listView.Items.Clear()
