@@ -59,6 +59,76 @@ function Get-DriverDiagProblemMessage {
     return $null
 }
 
+function Test-DriverDiagIsBenignVirtualNetworkDevice {
+    param(
+        [string]$FriendlyName,
+        [string]$InstanceId
+    )
+
+    $label = if (-not [string]::IsNullOrWhiteSpace($FriendlyName)) { $FriendlyName } else { $InstanceId }
+    if ([string]::IsNullOrWhiteSpace($label)) { return $false }
+
+    if ($label -match '(?i)\bWAN Miniport\b') { return $true }
+    if ($label -match '(?i)Wi-?Fi Direct Virtual Adapter') { return $true }
+    if ($label -match '(?i)Kernel Debug Network Adapter') { return $true }
+    return $false
+}
+
+function Test-DriverDiagIsIntelIpfExtensionDevice {
+    param([string]$FriendlyName)
+    if ([string]::IsNullOrWhiteSpace($FriendlyName)) { return $false }
+    return ($FriendlyName -match '(?i)IPF Extension Provider')
+}
+
+function Test-DriverDiagDeviceDriverHintsOemVendor {
+    param(
+        $VendorInfo,
+        $DriverInfo,
+        [string]$FriendlyName
+    )
+
+    if (-not $VendorInfo -or -not $VendorInfo.Found) { return $false }
+
+    $blob = "$FriendlyName $($DriverInfo.DriverName) $($DriverInfo.DriverProvider)"
+    if ([string]::IsNullOrWhiteSpace($blob)) { return $false }
+
+    $knownTokens = @(
+        'Realtek', 'Intel', 'AMD', 'NVIDIA', 'Qualcomm', 'Broadcom', 'MediaTek',
+        'Marvell', 'Atheros', 'Killer', 'Rivet', 'Ralink'
+    )
+    foreach ($token in $knownTokens) {
+        if ($VendorInfo.VendorName -match $token -and $blob -match $token) { return $true }
+    }
+
+    switch ($VendorInfo.VendorId) {
+        { $_ -in @('10EC', '0BDA') } {
+            if ($blob -match '(?i)Realtek|\bRTL[0-9A-Z]{2,}|rtwl|rtk') { return $true }
+        }
+        '8086' {
+            if ($blob -match '(?i)\bIntel\b') { return $true }
+        }
+        '14E4' {
+            if ($blob -match '(?i)Broadcom|BCM') { return $true }
+        }
+    }
+
+    return $false
+}
+
+function Test-DriverDiagDeviceHealthyForScan {
+    param(
+        $Dev,
+        [Nullable[int]]$ProblemCode
+    )
+
+    $status = [string]$Dev.Status
+    $code = if ($null -ne $ProblemCode) { [int]$ProblemCode } else { 0 }
+    if ($code -gt 0) { return $false }
+    if ($status -eq 'OK') { return $true }
+    if ([string]::IsNullOrWhiteSpace($status)) { return $true }
+    return $false
+}
+
 function Get-DriverDiagClassCategoryMap {
     if ($script:ClassCategoryMap) { return $script:ClassCategoryMap }
 
@@ -307,6 +377,23 @@ function Test-DriverDiagIsSuspicious {
     )
 
     $reasons = [System.Collections.Generic.List[string]]::new()
+    $friendly = [string]$Device.FriendlyName
+    $instanceId = [string]$Device.InstanceId
+
+    if (Test-DriverDiagIsBenignVirtualNetworkDevice -FriendlyName $friendly -InstanceId $instanceId) {
+        return @()
+    }
+
+    $problemCode = $null
+    if ($null -ne $Device.Problem) {
+        try { $problemCode = [int]$Device.Problem } catch { }
+    }
+    $healthy = Test-DriverDiagDeviceHealthyForScan -Dev $Device -ProblemCode $problemCode
+    $driverMatchesOem = Test-DriverDiagDeviceDriverHintsOemVendor -VendorInfo $VendorInfo -DriverInfo $DriverInfo -FriendlyName $friendly
+
+    if ($healthy -and $driverMatchesOem) {
+        return @()
+    }
 
     if ($VendorInfo -and $VendorInfo.Found -and $VendorInfo.VendorId) {
         $oemVen = $VendorInfo.VendorId -notin @('1414', '0000')
@@ -317,23 +404,33 @@ function Test-DriverDiagIsSuspicious {
                 'SCSIAdapter', 'HDC', 'USB', 'USBDevice', 'Net', 'Bluetooth', 'Processor'
             )
             if ($Device.Class -in @('Net', 'Media', 'MEDIA', 'Display', 'Image', 'Camera', 'Biometric', 'SmartCardReader')) {
-                $reasons.Add('Driver generico Microsoft em dispositivo OEM (VEN conhecido)')
+                if (-not $driverMatchesOem) {
+                    $reasons.Add('Driver generico Microsoft em dispositivo OEM (VEN conhecido)')
+                }
             }
-            elseif (-not $expectedGeneric -and $DriverInfo.DriverProvider) {
+            elseif (-not $expectedGeneric -and $DriverInfo.DriverProvider -and -not $driverMatchesOem) {
                 $reasons.Add('Provedor generico em hardware OEM')
             }
         }
     }
 
     if ($DriverInfo.DriverProvider -and $DriverInfo.DriverProvider -match '(?i)unknown|n/?a|null') {
-        $reasons.Add('Provedor de driver estranho ou ausente')
+        if (-not ($healthy -and $Device.Class -in @('Net', 'NetClient', 'NetService', 'Bluetooth'))) {
+            $reasons.Add('Provedor de driver estranho ou ausente')
+        }
     }
 
     if ($DriverInfo.DriverVersion -and $DriverInfo.DriverVersion -match '^(0\.0\.0\.0|1\.0\.0\.0)$') {
-        $reasons.Add("Versao de driver incoerente ($($DriverInfo.DriverVersion))")
+        $skipPlaceholderVersion = $healthy -and (
+            (Test-DriverDiagIsBenignVirtualNetworkDevice -FriendlyName $friendly -InstanceId $instanceId) -or
+            ($Device.Class -in @('Net', 'NetClient', 'NetService', 'NetTrans', 'Bluetooth'))
+        )
+        if (-not $skipPlaceholderVersion) {
+            $reasons.Add("Versao de driver incoerente ($($DriverInfo.DriverVersion))")
+        }
     }
 
-    return , $reasons
+    return [string[]]@($reasons)
 }
 
 function New-DriverDiagDeviceObject {
@@ -402,7 +499,11 @@ function Test-DriverDiagDeviceLooksProblem {
         [Nullable[int]]$ProblemCode
     )
 
-    if ($PnputilEntry) { return $true }
+    if ($PnputilEntry) {
+        if ($null -ne $PnputilEntry.ProblemCode -and [int]$PnputilEntry.ProblemCode -gt 0) { return $true }
+        $pnpuStatus = [string]$PnputilEntry.Status
+        if ($pnpuStatus -match '(?i)Error|Failed|Degraded|Problem') { return $true }
+    }
     if ($null -ne $ProblemCode -and $ProblemCode -gt 0) { return $true }
 
     $status = [string]$Dev.Status
@@ -581,6 +682,15 @@ function Invoke-DriverDiagScan {
         $classForSuspect = if ($class) { $class } else { '' }
         $mayBeSuspicious = $IncludeSuspicious -and $script:SuspiciousScanClasses.Contains($classForSuspect)
 
+        $healthyDevice = Test-DriverDiagDeviceHealthyForScan -Dev $dev -ProblemCode $problemCode
+        if ($healthyDevice -and (Test-DriverDiagIsBenignVirtualNetworkDevice -FriendlyName $friendly -InstanceId $instanceId)) {
+            $mayBeSuspicious = $false
+        }
+        if ($healthyDevice -and (Test-DriverDiagIsIntelIpfExtensionDevice -FriendlyName $friendly)) {
+            $looksProblem = $false
+            $mayBeSuspicious = $false
+        }
+
         # Skip healthy devices outside suspicious-relevant classes entirely
         if (-not $looksProblem -and -not $mayBeSuspicious) {
             continue
@@ -619,13 +729,16 @@ function Invoke-DriverDiagScan {
         elseif ($null -ne $problemCode -and $problemCode -gt 0 -and $problemCode -ne 28) {
             $category = 'Broken'
         }
-        elseif ($notOk -and $status -match '(?i)Error|Degraded|Unknown') {
+        elseif ($notOk -and $status -match '(?i)^(Error|Degraded)$') {
             $category = 'Broken'
+        }
+        elseif ($healthyDevice -and (Test-DriverDiagIsIntelIpfExtensionDevice -FriendlyName $friendly)) {
+            continue
         }
 
         $suspiciousReasons = @()
         if ($IncludeSuspicious -and -not $category -and $mayBeSuspicious) {
-            $suspiciousReasons = @(Test-DriverDiagIsSuspicious -Device $dev -VendorInfo $vendorInfo -DriverInfo $driverInfo)
+            $suspiciousReasons = [string[]](Test-DriverDiagIsSuspicious -Device $dev -VendorInfo $vendorInfo -DriverInfo $driverInfo)
             if ($suspiciousReasons.Count -gt 0) {
                 $category = 'Suspicious'
             }
